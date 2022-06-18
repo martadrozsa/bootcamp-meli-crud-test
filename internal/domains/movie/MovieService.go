@@ -1,10 +1,11 @@
 package movie
 
 type serviceImpl struct {
+	repository MovieRepository
 }
 
-func CreateMovieService() MovieService {
-	return &serviceImpl{}
+func CreateMovieService(r MovieRepository) MovieService {
+	return &serviceImpl{r}
 }
 
 func (s *serviceImpl) GetAll() ([]*Movie, error) {

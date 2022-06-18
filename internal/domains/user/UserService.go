@@ -1,25 +1,40 @@
 package user
 
 type serviceImpl struct {
+	repository UserRepository
 }
 
-func CreateUserService() UserService {
-	return &serviceImpl{}
+func CreateUserService(r UserRepository) UserService {
+	return &serviceImpl{r}
 }
 
-func (s *serviceImpl) GetAll() ([]*User, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *serviceImpl) GetAll() ([]User, error) {
+	users, err := s.repository.GetAll()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (s *serviceImpl) GetById(id int64) (*User, error) {
-	//TODO implement me
-	panic("implement me")
+	user, err := s.repository.GetById(id)
+
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (s *serviceImpl) Create(name string, age int, movieGenre string) (*User, error) {
-	//TODO implement me
-	panic("implement me")
+	newUser, err := s.repository.Create(name, age, movieGenre)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newUser, nil
 }
 
 func (s *serviceImpl) UpdateAge(id int64, age int) (*User, error) {

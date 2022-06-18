@@ -8,7 +8,7 @@ type User struct {
 }
 
 type UserRepository interface {
-	GetAll() ([]*User, error)
+	GetAll() ([]User, error)
 	GetById(id int64) (*User, error)
 	Create(name string, age int, movieGenre string) (*User, error)
 	UpdateAge(id int64, age int) (*User, error)
@@ -16,7 +16,7 @@ type UserRepository interface {
 }
 
 type UserService interface {
-	GetAll() ([]*User, error)
+	GetAll() ([]User, error)
 	GetById(id int64) (*User, error)
 	Create(name string, age int, movieGenre string) (*User, error)
 	UpdateAge(id int64, age int) (*User, error)
