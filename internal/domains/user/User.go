@@ -12,7 +12,7 @@ type UserRepository interface {
 	GetById(id int64) (*User, error)
 	Create(name string, age int, movieGenre string) (*User, error)
 	UpdateAge(id int64, age int) (*User, error)
-	Delete(id int64)
+	Delete(id int64) error
 }
 
 type UserService interface {
@@ -20,5 +20,5 @@ type UserService interface {
 	GetById(id int64) (*User, error)
 	Create(name string, age int, movieGenre string) (*User, error)
 	UpdateAge(id int64, age int) (*User, error)
-	Delete(id int64)
+	Delete(id int64) error
 }

@@ -48,11 +48,41 @@ func (r *repositoryImpl) Create(name string, age int, movieGenre string) (*User,
 }
 
 func (r *repositoryImpl) UpdateAge(id int64, age int) (*User, error) {
-	//TODO implement me
-	panic("implement me")
+
+	var user User
+	update := false
+	for i := range listUsers {
+		if listUsers[i].Id == id {
+			listUsers[i].Age = age
+			update = true
+			user = listUsers[i]
+			break
+		}
+	}
+
+	if !update {
+		return nil, fmt.Errorf("the product with id %d was not found", id)
+	}
+	return &user, nil
+
 }
 
-func (r *repositoryImpl) Delete(id int64) {
-	//TODO implement me
-	panic("implement me")
+func (r *repositoryImpl) Delete(id int64) error {
+	deleted := false
+	var index int
+
+	for i := range listUsers {
+		if listUsers[i].Id == id {
+			index = i
+			deleted = true
+		}
+	}
+
+	if !deleted {
+		return fmt.Errorf("the product with id %d was not found", id)
+	}
+
+	listUsers = append(listUsers[:index], listUsers[index+1:]...)
+
+	return nil
 }

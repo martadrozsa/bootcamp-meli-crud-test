@@ -19,6 +19,8 @@ func main() {
 	userGroup.GET("/", userController.GetAll())
 	userGroup.GET("/:id", userController.GetById())
 	userGroup.POST("/", userController.Create())
+	userGroup.PATCH("/:id", userController.UpdateAge())
+	userGroup.DELETE("/:id", userController.Delete())
 
 	router.Run()
 }

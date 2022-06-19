@@ -38,11 +38,9 @@ func (s *serviceImpl) Create(name string, age int, movieGenre string) (*User, er
 }
 
 func (s *serviceImpl) UpdateAge(id int64, age int) (*User, error) {
-	//TODO implement me
-	panic("implement me")
+	return s.repository.UpdateAge(id, age)
 }
 
-func (s *serviceImpl) Delete(id int64) {
-	//TODO implement me
-	panic("implement me")
+func (s *serviceImpl) Delete(id int64) error {
+	return s.repository.Delete(id)
 }

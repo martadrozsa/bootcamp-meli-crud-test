@@ -73,3 +73,51 @@ func (c UserController) Create() gin.HandlerFunc {
 		ctx.JSON(http.StatusCreated, newUser)
 	}
 }
+
+func (c UserController) UpdateAge() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+
+		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
+		}
+
+		var requestUser requestUserPatch
+		if err := ctx.ShouldBindJSON(&requestUser); err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
+			return
+		}
+
+		if requestUser.Age <= 0 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"message": "invalid imput. Check the data entered",
+			})
+			return
+		}
+
+		userUpdate, err := c.service.UpdateAge(id, requestUser.Age)
+		if err != nil {
+			ctx.JSON(http.StatusNotFound, err)
+			return
+		}
+
+		ctx.JSON(http.StatusOK, userUpdate)
+	}
+}
+
+func (c UserController) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
+			return
+		}
+
+		err = c.service.Delete(id)
+		if err != nil {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusNoContent, err)
+	}
+}
