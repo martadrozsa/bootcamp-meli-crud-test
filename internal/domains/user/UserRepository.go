@@ -1,6 +1,8 @@
 package user
 
-import "fmt"
+import (
+	"fmt"
+)
 
 var listUsers []User
 var lastId int64 = 1
