@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	user "github.com/martadrozsa/bootcamp-meli-crud-test/internal/domains/user"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/domain"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,15 +13,15 @@ type UserRepository struct {
 }
 
 // Create provides a mock function with given fields: name, age, movieGenre
-func (_m *UserRepository) Create(name string, age int, movieGenre string) (*user.User, error) {
+func (_m *UserRepository) Create(name string, age int, movieGenre string) (*domain.User, error) {
 	ret := _m.Called(name, age, movieGenre)
 
-	var r0 *user.User
-	if rf, ok := ret.Get(0).(func(string, int, string) *user.User); ok {
+	var r0 *domain.User
+	if rf, ok := ret.Get(0).(func(string, int, string) *domain.User); ok {
 		r0 = rf(name, age, movieGenre)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*user.User)
+			r0 = ret.Get(0).(*domain.User)
 		}
 	}
 
@@ -50,15 +50,15 @@ func (_m *UserRepository) Delete(id int64) error {
 }
 
 // GetAll provides a mock function with given fields:
-func (_m *UserRepository) GetAll() ([]user.User, error) {
+func (_m *UserRepository) GetAll() ([]domain.User, error) {
 	ret := _m.Called()
 
-	var r0 []user.User
-	if rf, ok := ret.Get(0).(func() []user.User); ok {
+	var r0 []domain.User
+	if rf, ok := ret.Get(0).(func() []domain.User); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]user.User)
+			r0 = ret.Get(0).([]domain.User)
 		}
 	}
 
@@ -73,15 +73,15 @@ func (_m *UserRepository) GetAll() ([]user.User, error) {
 }
 
 // GetById provides a mock function with given fields: id
-func (_m *UserRepository) GetById(id int64) (*user.User, error) {
+func (_m *UserRepository) GetById(id int64) (*domain.User, error) {
 	ret := _m.Called(id)
 
-	var r0 *user.User
-	if rf, ok := ret.Get(0).(func(int64) *user.User); ok {
+	var r0 *domain.User
+	if rf, ok := ret.Get(0).(func(int64) *domain.User); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*user.User)
+			r0 = ret.Get(0).(*domain.User)
 		}
 	}
 
@@ -96,15 +96,15 @@ func (_m *UserRepository) GetById(id int64) (*user.User, error) {
 }
 
 // UpdateAge provides a mock function with given fields: id, age
-func (_m *UserRepository) UpdateAge(id int64, age int) (*user.User, error) {
+func (_m *UserRepository) UpdateAge(id int64, age int) (*domain.User, error) {
 	ret := _m.Called(id, age)
 
-	var r0 *user.User
-	if rf, ok := ret.Get(0).(func(int64, int) *user.User); ok {
+	var r0 *domain.User
+	if rf, ok := ret.Get(0).(func(int64, int) *domain.User); ok {
 		r0 = rf(id, age)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*user.User)
+			r0 = ret.Get(0).(*domain.User)
 		}
 	}
 

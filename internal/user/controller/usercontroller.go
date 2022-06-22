@@ -1,8 +1,10 @@
-package controllers
+package controller
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/domains/user"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/domain"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/pkg/httputil"
 	"net/http"
 	"strconv"
 )
@@ -18,10 +20,10 @@ type requestUserPatch struct {
 }
 
 type UserController struct {
-	service user.UserService
+	service domain.UserService
 }
 
-func CreateUserController(userService user.UserService) *UserController {
+func CreateUserController(userService domain.UserService) *UserController {
 	return &(UserController{service: userService})
 }
 
@@ -30,9 +32,9 @@ func (c UserController) GetAll() gin.HandlerFunc {
 		users, err := c.service.GetAll()
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
+			httputil.NewError(ctx, http.StatusInternalServerError, err)
 		}
-		ctx.JSON(http.StatusOK, users)
+		httputil.NewResponse(ctx, http.StatusOK, users)
 	}
 }
 
@@ -40,15 +42,16 @@ func (c UserController) GetById() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
+			httputil.NewError(ctx, http.StatusBadRequest, err)
 		}
 
-		user, err := c.service.GetById(id)
+		userId, err := c.service.GetById(id)
 		if err != nil {
-			ctx.JSON(http.StatusNotFound, err)
+			httputil.NewError(ctx, http.StatusNotFound, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, user)
+
+		httputil.NewResponse(ctx, http.StatusOK, userId)
 	}
 }
 
@@ -58,19 +61,17 @@ func (c UserController) Create() gin.HandlerFunc {
 		var requestUser requestUserPost
 
 		if err := ctx.ShouldBindJSON(&requestUser); err != nil {
-			ctx.JSON(http.StatusUnprocessableEntity, gin.H{
-				"message": "invalid imput. Check the data entered",
-			})
+			httputil.NewError(ctx, http.StatusUnprocessableEntity, errors.New("invalid input. Check the data entered"))
 			return
 		}
 
 		newUser, err := c.service.Create(requestUser.Name, requestUser.Age, requestUser.MovieGenre)
 
 		if err != nil {
-			ctx.JSON(http.StatusConflict, err)
+			httputil.NewError(ctx, http.StatusConflict, err)
 		}
 
-		ctx.JSON(http.StatusCreated, newUser)
+		httputil.NewResponse(ctx, http.StatusCreated, newUser)
 	}
 }
 
@@ -79,29 +80,27 @@ func (c UserController) UpdateAge() gin.HandlerFunc {
 
 		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
+			httputil.NewError(ctx, http.StatusBadRequest, err)
 		}
 
 		var requestUser requestUserPatch
 		if err := ctx.ShouldBindJSON(&requestUser); err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
+			httputil.NewError(ctx, http.StatusBadRequest, err)
 			return
 		}
 
 		if requestUser.Age <= 0 {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"message": "invalid imput. Check the data entered",
-			})
+			httputil.NewError(ctx, http.StatusBadRequest, errors.New("invalid input. Check the data entered"))
 			return
 		}
 
 		userUpdate, err := c.service.UpdateAge(id, requestUser.Age)
 		if err != nil {
-			ctx.JSON(http.StatusNotFound, err)
+			httputil.NewError(ctx, http.StatusNotFound, err)
 			return
 		}
 
-		ctx.JSON(http.StatusOK, userUpdate)
+		httputil.NewResponse(ctx, http.StatusOK, userUpdate)
 	}
 }
 
@@ -109,15 +108,15 @@ func (c UserController) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
+			httputil.NewError(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 
 		err = c.service.Delete(id)
 		if err != nil {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			httputil.NewError(ctx, http.StatusNotFound, err)
 			return
 		}
-		ctx.JSON(http.StatusNoContent, err)
+		httputil.NewResponse(ctx, http.StatusNoContent, err)
 	}
 }

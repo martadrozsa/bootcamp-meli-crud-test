@@ -2,8 +2,9 @@ package service_test
 
 import (
 	"fmt"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/domains/user"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/domains/user/mocks"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/domain"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/domain/mocks"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/service"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -14,7 +15,7 @@ func TestUserService_Create(t *testing.T) {
 	// INICIALIZACAO / PREPARACAO
 	// Testa se o user foi criado com sucesso
 	t.Run("create_ok: cria o user com os campos necessários", func(t *testing.T) {
-		expectedUser := &user.User{
+		expectedUser := &domain.User{
 			Name:       "Ana",
 			Age:        25,
 			MovieGenre: "Fantasy",
@@ -30,7 +31,7 @@ func TestUserService_Create(t *testing.T) {
 			Once()
 
 		// Cria instância do service usando o mockRepo de mock.
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		// EXECUCAO DO TESTE
 		// invoca a funcao a  ser testada
@@ -49,7 +50,7 @@ func TestUserService_Create(t *testing.T) {
 			Return(nil, fmt.Errorf("the name has already been registered")).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		expectedUser, err := service.Create("Ana", 25, "Fantasy")
 
@@ -64,7 +65,7 @@ func TestUserService_GetAll(t *testing.T) {
 
 	// Testa se todos os users foram retornados da base
 	t.Run("find_all: deve retornar todos os usuários existentes na base", func(t *testing.T) {
-		expectedUserList := []user.User{
+		expectedUserList := []domain.User{
 			{
 				Id:         1,
 				Name:       "Ana",
@@ -84,7 +85,7 @@ func TestUserService_GetAll(t *testing.T) {
 			Return(expectedUserList, nil).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		userList, err := service.GetAll()
 
@@ -98,10 +99,10 @@ func TestUserService_GetAll(t *testing.T) {
 
 		mockRepo.
 			On("GetAll").
-			Return([]user.User{}, fmt.Errorf("error: users not found")).
+			Return([]domain.User{}, fmt.Errorf("error: users not found")).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		_, err := service.GetAll()
 		assert.Error(t, err)
@@ -119,7 +120,7 @@ func TestUserService_GetById(t *testing.T) {
 			Return(nil, fmt.Errorf("user id was not found")).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		userId, err := service.GetById(int64(1))
 
@@ -129,7 +130,7 @@ func TestUserService_GetById(t *testing.T) {
 
 	// Testa se o id do user procurado foi encontrado
 	t.Run("find_by_id_existent: quando o user procurado por id existir, retorna as informações do user solicitado", func(t *testing.T) {
-		expectedUserList := []*user.User{
+		expectedUserList := []*domain.User{
 			{
 				Id:         1,
 				Name:       "Ana",
@@ -149,7 +150,7 @@ func TestUserService_GetById(t *testing.T) {
 			Return(expectedUserList[1], nil).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		resultUser, err := service.GetById(int64(1))
 
@@ -164,7 +165,7 @@ func TestUserService_UpdateAge(t *testing.T) {
 
 	// Testa se a atualização do user atualizado foi bem sucedida
 	t.Run("update_existent: Quando a atualização dos dados for bem sucedida, o user será devolvido com as informações atualizadas", func(t *testing.T) {
-		expectedUser := &user.User{
+		expectedUser := &domain.User{
 			Id:         1,
 			Name:       "Ana",
 			Age:        25,
@@ -176,7 +177,7 @@ func TestUserService_UpdateAge(t *testing.T) {
 			Return(expectedUser, nil).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		userUpdate, err := service.UpdateAge(int64(1), 26)
 
@@ -193,7 +194,7 @@ func TestUserService_UpdateAge(t *testing.T) {
 			Return(nil, fmt.Errorf("user was not found")).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		userUpdate, err := service.UpdateAge(int64(1), 26)
 
@@ -213,7 +214,7 @@ func TestUserService_Delete(t *testing.T) {
 			Return(fmt.Errorf("user was not found")).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		err := service.Delete(int64(1))
 
@@ -228,7 +229,7 @@ func TestUserService_Delete(t *testing.T) {
 			Return(nil).
 			Once()
 
-		service := user.CreateUserService(mockRepo)
+		service := service.CreateUserService(mockRepo)
 
 		err := service.Delete(int64(1))
 

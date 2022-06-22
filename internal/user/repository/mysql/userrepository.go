@@ -1,27 +1,28 @@
-package user
+package mysql
 
 import (
 	"fmt"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/domain"
 )
 
-var listUsers []User
+var listUsers []domain.User
 var lastId int64 = 1
 
 type repositoryImpl struct {
 }
 
-func CreateUserRepository() UserRepository {
-	listUsers = []User{}
+func CreateUserRepository() domain.UserRepository {
+	listUsers = []domain.User{}
 	listUsers = append(listUsers)
 
 	return &repositoryImpl{}
 }
 
-func (r *repositoryImpl) GetAll() ([]User, error) {
+func (r *repositoryImpl) GetAll() ([]domain.User, error) {
 	return listUsers, nil
 }
 
-func (r *repositoryImpl) GetById(id int64) (*User, error) {
+func (r *repositoryImpl) GetById(id int64) (*domain.User, error) {
 	for _, user := range listUsers {
 		if user.Id == id {
 			return &user, nil
@@ -30,9 +31,9 @@ func (r *repositoryImpl) GetById(id int64) (*User, error) {
 	return nil, fmt.Errorf("the user with the id %d was not found", id)
 }
 
-func (r *repositoryImpl) Create(name string, age int, movieGenre string) (*User, error) {
+func (r *repositoryImpl) Create(name string, age int, movieGenre string) (*domain.User, error) {
 	nextId := lastId
-	newUser := User{
+	newUser := domain.User{
 		Id:         nextId,
 		Name:       name,
 		Age:        age,
@@ -49,9 +50,9 @@ func (r *repositoryImpl) Create(name string, age int, movieGenre string) (*User,
 	return &newUser, nil
 }
 
-func (r *repositoryImpl) UpdateAge(id int64, age int) (*User, error) {
+func (r *repositoryImpl) UpdateAge(id int64, age int) (*domain.User, error) {
 
-	var user User
+	var user domain.User
 	update := false
 	for i := range listUsers {
 		if listUsers[i].Id == id {

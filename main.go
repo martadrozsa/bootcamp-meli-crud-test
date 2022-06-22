@@ -2,8 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/cmd/controllers"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/domains/user"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/controller"
+	modules2 "github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/repository/mysql"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/service"
 )
 
 func main() {
@@ -11,9 +12,9 @@ func main() {
 	router := gin.Default()
 	group := router.Group("api/")
 
-	userRepository := user.CreateUserRepository()
-	userService := user.CreateUserService(userRepository)
-	userController := controllers.CreateUserController(userService)
+	userRepository := modules2.CreateUserRepository()
+	userService := service.CreateUserService(userRepository)
+	userController := controller.CreateUserController(userService)
 
 	userGroup := group.Group("/users")
 	userGroup.GET("/", userController.GetAll())
