@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/controller"
+	"github.com/martadrozsa/bootcamp-meli-crud-test/cmd/controller/user"
 	modules2 "github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/repository/mysql"
 	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/user/service"
 )
@@ -14,7 +14,7 @@ func main() {
 
 	userRepository := modules2.CreateUserRepository()
 	userService := service.CreateUserService(userRepository)
-	userController := controller.CreateUserController(userService)
+	userController := user.CreateUserController(userService)
 
 	userGroup := group.Group("/users")
 	userGroup.GET("/", userController.GetAll())
