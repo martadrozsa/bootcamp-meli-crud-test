@@ -29,7 +29,6 @@ func (s serviceImpl) GetById(ctx context.Context, id int64) (*domain.Movie, erro
 	if err != nil {
 		return nil, err
 	}
-
 	return productId, nil
 }
 

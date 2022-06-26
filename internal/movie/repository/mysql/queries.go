@@ -17,5 +17,5 @@ const (
 	WHERE id=?
 	`
 
-	sqlDelete = "DELETE FROM product WHERE id=?"
+	sqlDelete = "DELETE FROM movie WHERE id=?"
 )

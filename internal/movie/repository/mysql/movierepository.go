@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/movie/domain"
 )
 
@@ -38,17 +39,26 @@ func (m *mysqlDBRepository) GetAll(ctx context.Context) ([]domain.Movie, error) 
 }
 
 func (m *mysqlDBRepository) GetById(ctx context.Context, id int64) (*domain.Movie, error) {
-	var movieId domain.Movie
+	var movie domain.Movie
 
-	rows, err := m.db.QueryContext(ctx, string(id), sqlGetById)
+	rows, err := m.db.QueryContext(ctx, sqlGetById, id)
 
+	if err != nil {
+		return nil, err
+	}
+
+	if rows.Next() != true {
+		return nil, errors.New("not found")
+	}
+
+	err = rows.Scan(&movie.Id, &movie.Name, &movie.Genre, &movie.Year, &movie.Award)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
 
-	return &movieId, nil
+	return &movie, nil
 
 }
 
@@ -92,10 +102,12 @@ func (m *mysqlDBRepository) UpdateAward(ctx context.Context, id int64, award int
 		return nil, err
 	}
 
-	return &domain.Movie{
-		Id:    id,
-		Award: award,
-	}, nil
+	movieUpdate, err := m.GetById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	
+	return movieUpdate, nil
 }
 
 func (m *mysqlDBRepository) Delete(ctx context.Context, id int64) error {
