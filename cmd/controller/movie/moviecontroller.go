@@ -14,7 +14,6 @@ type MovieController struct {
 }
 
 type requestMoviePost struct {
-	Id    int64  `json:"id" binding:"required"`
 	Name  string `json:"name" binding:"required"`
 	Genre string `json:"genre" binding:"required"`
 	Year  int    `json:"year" binding:"required"`

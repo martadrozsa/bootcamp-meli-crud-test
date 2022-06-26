@@ -8,7 +8,7 @@ const (
 	sqlCreate = `
 	INSERT INTO 
 	movie (name, genre, year, award) 
-	VALUES (?, ?, ?, ?, ?)
+	VALUES (?, ?, ?, ?)
 	`
 
 	sqlUpdateAward = `
