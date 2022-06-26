@@ -29,7 +29,7 @@ func (m *mysqlDBRepository) GetAll(ctx context.Context) ([]domain.Movie, error) 
 	for rows.Next() {
 		var movie domain.Movie
 
-		err := rows.Scan(movie.Id, movie.Name, movie.Genre, movie.Year, movie.Award)
+		err := rows.Scan(&movie.Id, &movie.Name, &movie.Genre, &movie.Year, &movie.Award)
 		if err != nil {
 			return movies, err
 		}
@@ -106,7 +106,7 @@ func (m *mysqlDBRepository) UpdateAward(ctx context.Context, id int64, award int
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return movieUpdate, nil
 }
 
