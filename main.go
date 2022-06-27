@@ -21,7 +21,7 @@ func main() {
 	router := gin.Default()
 	group := router.Group("api/")
 
-	userRepository := mysql.CreateUserRepository()
+	userRepository := mysql.CreateUserRepository(db)
 	userService := service.CreateUserService(userRepository)
 	userController := user.CreateUserController(userService)
 

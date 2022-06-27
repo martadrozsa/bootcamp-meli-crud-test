@@ -7,15 +7,15 @@ import (
 	"github.com/martadrozsa/bootcamp-meli-crud-test/internal/movie/domain"
 )
 
-type mysqlDBRepository struct {
+type mysqlDBMovieRepository struct {
 	db *sql.DB
 }
 
 func CreateMovieRepository(db *sql.DB) domain.MovieRepository {
-	return &mysqlDBRepository{db: db}
+	return &mysqlDBMovieRepository{db: db}
 }
 
-func (m *mysqlDBRepository) GetAll(ctx context.Context) ([]domain.Movie, error) {
+func (m *mysqlDBMovieRepository) GetAll(ctx context.Context) ([]domain.Movie, error) {
 	movies := []domain.Movie{}
 
 	rows, err := m.db.QueryContext(ctx, sqlGetAll)
@@ -38,7 +38,7 @@ func (m *mysqlDBRepository) GetAll(ctx context.Context) ([]domain.Movie, error) 
 	return movies, nil
 }
 
-func (m *mysqlDBRepository) GetById(ctx context.Context, id int64) (*domain.Movie, error) {
+func (m *mysqlDBMovieRepository) GetById(ctx context.Context, id int64) (*domain.Movie, error) {
 	var movie domain.Movie
 
 	rows, err := m.db.QueryContext(ctx, sqlGetById, id)
@@ -62,7 +62,7 @@ func (m *mysqlDBRepository) GetById(ctx context.Context, id int64) (*domain.Movi
 
 }
 
-func (m *mysqlDBRepository) Create(ctx context.Context, name string, genre string, year int, award int) (*domain.Movie, error) {
+func (m *mysqlDBMovieRepository) Create(ctx context.Context, name string, genre string, year int, award int) (*domain.Movie, error) {
 	movie, err := m.db.ExecContext(
 		ctx,
 		sqlCreate,
@@ -90,7 +90,7 @@ func (m *mysqlDBRepository) Create(ctx context.Context, name string, genre strin
 	}, nil
 }
 
-func (m *mysqlDBRepository) UpdateAward(ctx context.Context, id int64, award int) (*domain.Movie, error) {
+func (m *mysqlDBMovieRepository) UpdateAward(ctx context.Context, id int64, award int) (*domain.Movie, error) {
 	_, err := m.db.ExecContext(
 		ctx,
 		sqlUpdateAward,
@@ -110,7 +110,7 @@ func (m *mysqlDBRepository) UpdateAward(ctx context.Context, id int64, award int
 	return movieUpdate, nil
 }
 
-func (m *mysqlDBRepository) Delete(ctx context.Context, id int64) error {
+func (m *mysqlDBMovieRepository) Delete(ctx context.Context, id int64) error {
 	_, err := m.db.ExecContext(ctx, sqlDelete, id)
 	if err != nil {
 		return err

@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 type User struct {
 	Id         int64  `json:"id"`
 	Name       string `json:"name"`
@@ -8,17 +10,17 @@ type User struct {
 }
 
 type UserRepository interface {
-	GetAll() ([]User, error)
-	GetById(id int64) (*User, error)
-	Create(name string, age int, movieGenre string) (*User, error)
-	UpdateAge(id int64, age int) (*User, error)
-	Delete(id int64) error
+	GetAll(ctx context.Context) ([]User, error)
+	GetById(ctx context.Context, id int64) (*User, error)
+	Create(ctx context.Context, name string, age int, movieGenre string) (*User, error)
+	UpdateAge(ctx context.Context, id int64, age int) (*User, error)
+	Delete(ctx context.Context, id int64) error
 }
 
 type UserService interface {
-	GetAll() ([]User, error)
-	GetById(id int64) (*User, error)
-	Create(name string, age int, movieGenre string) (*User, error)
-	UpdateAge(id int64, age int) (*User, error)
-	Delete(id int64) error
+	GetAll(ctx context.Context) ([]User, error)
+	GetById(ctx context.Context, id int64) (*User, error)
+	Create(ctx context.Context, name string, age int, movieGenre string) (*User, error)
+	UpdateAge(ctx context.Context, id int64, age int) (*User, error)
+	Delete(ctx context.Context, id int64) error
 }
