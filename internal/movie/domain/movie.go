@@ -11,17 +11,17 @@ type Movie struct {
 }
 
 type MovieRepository interface {
-	GetAll(ctx context.Context) ([]Movie, error)
+	GetAll(ctx context.Context) (*[]Movie, error)
 	GetById(ctx context.Context, id int64) (*Movie, error)
-	Create(ctx context.Context, name string, genre string, year int, award int) (*Movie, error)
-	UpdateAward(ctx context.Context, id int64, award int) (*Movie, error)
+	Create(ctx context.Context, movie *Movie) (*Movie, error)
+	UpdateAward(ctx context.Context, movie *Movie) (*Movie, error)
 	Delete(ctx context.Context, id int64) error
 }
 
 type MovieService interface {
-	GetAll(ctx context.Context) ([]Movie, error)
+	GetAll(ctx context.Context) (*[]Movie, error)
 	GetById(ctx context.Context, id int64) (*Movie, error)
-	Create(ctx context.Context, name string, genre string, year int, award int) (*Movie, error)
+	Create(ctx context.Context, movie *Movie) (*Movie, error)
 	UpdateAward(ctx context.Context, id int64, award int) (*Movie, error)
 	Delete(ctx context.Context, id int64) error
 }
